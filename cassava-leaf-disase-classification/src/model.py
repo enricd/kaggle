@@ -12,14 +12,8 @@ class Model(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters(config)
         self.trans_train = torch.nn.Sequential(
-            transforms.RandomResizedCrop(self.hparams.size),
-            transforms.RandomHorizontalFlip(),
-            #transforms.ColorJitter(
-            #    brightness=0.2, 
-            #    contrast=0.2, 
-            #    saturation=0.1, 
-            #    hue=0.1
-            #)
+            transforms.CenterCrop(self.hparams.size)
+            # ...
         )
         self.trans_test = transforms.CenterCrop(self.hparams.size)
 

@@ -9,3 +9,4 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 - Descarga datos
 - [Exploración datos](./00_exploracion_datos.ipynb)
 - [Baseline](./00_baseline.py) -> 0.722
+- Resnet 256 -> 0.81
