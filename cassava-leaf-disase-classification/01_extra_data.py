@@ -11,12 +11,12 @@ config = {
     'batch_size': 256,
     'max_epochs': 50,
     'precision': 16,
-    'subset': 0,
+    'subset': 0.1,
     'test_size': 0.2,
     'seed': 42,
     'size': 256,
-    'backbone': 'resnet50',
-    'val_batches': 1.,
+    'backbone': 'resnet18',
+    'val_batches': 10,
     'extra_data': 1
 }
 
