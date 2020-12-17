@@ -23,4 +23,4 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 # Día 4
 
-- [Validación Cruzada](./06_cv.py) -> corriendo...
+- [Validación Cruzada](./06_cv.py) -> 0.825
