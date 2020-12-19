@@ -18,7 +18,7 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 # Día 3
 
-- [Data Augmentation](./04_da.py)
+- [Data Augmentation](./04_da.py) -> 0.79
 - [TTA](./05_tta.ipynb) -> 0.815
 
 # Día 4
@@ -27,5 +27,19 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 # Día 5 
 
-en0 < renset18 < wide resnet50 (66M) < se_resnet50 (26M) < swav(28M+15M) < resnext50 (22M) < resnet50 < resnest (25M) < se_resnext (25M) < en5 (28M) < en3 (10M)
+en0 < renset18 < wide resnet50 (66M) < se_resnet50 (26M) < swav(28M+15M) < resnext50 (22M) < resnet50 < resnest (25M) < se_resnext (25M) < en5 (28M) < vit_base_resnet50 (110M) < en3 (10M)
+
+
+
+efficientnet_b3 -> 0.8375 (val) / 0.791 (lb)
+
+# Día 6
+
+- learning rate scheduling
+- freeze / unfreeze
+
+# Día 7
+
+pseudolabels con eficentnetb3 entrenada en todo el dataset y threshold 0.95 en test y extra de extra
+resnet18 da -> 0.85 (val) / 0.784 (lb)
 

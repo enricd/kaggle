@@ -4,10 +4,8 @@ import torch.nn.functional as F
 from pytorch_lightning.metrics.functional.classification import accuracy
 import torch
 from torchvision import transforms
-from efficientnet_pytorch import EfficientNet
-import pretrainedmodels
-from pl_bolts.models.self_supervised import SwAV
 import timm
+from pl_bolts.models.self_supervised import SwAV
 
 class Model(pl.LightningModule):
 
@@ -17,7 +15,12 @@ class Model(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         x, y = batch
-        y_hat = self(x)
+        if self.trainer.current_epoch < self.hparams.unfreeze:
+            with torch.no_grad():
+                features = self.backbone(x)
+        else: 
+            features = self.backbone(x)
+        y_hat = self.head(features[-1])
         loss = F.cross_entropy(y_hat, y)
         acc = accuracy(y_hat, y)
         self.log('loss', loss)
@@ -33,7 +36,14 @@ class Model(pl.LightningModule):
         self.log('val_acc', val_acc, prog_bar=True)
 
     def configure_optimizers(self):
-        return getattr(torch.optim, self.hparams.optimizer)(self.parameters(), lr=self.hparams.lr)
+        optimizer = getattr(torch.optim, self.hparams.optimizer)(self.parameters(), lr=self.hparams.lr)
+        if self.hparams.scheduler:
+            schedulers = [
+                getattr(torch.optim.lr_scheduler, scheduler)(optimizer, **params)
+                for scheduler, params in self.hparams.scheduler.items()
+            ]
+            return [optimizer], schedulers 
+        return optimizer
 
 class Resnet(Model):
     def __init__(self, config):
@@ -47,9 +57,15 @@ class Resnet(Model):
 class TIMM(Model):
     def __init__(self, config):
         super().__init__(config)
-        self.m = timm.create_model(self.hparams.backbone, pretrained=True, num_classes=5)
+        self.backbone = timm.create_model(self.hparams.backbone, pretrained=self.hparams.pretrained, features_only=True)
+        self.head = torch.nn.Sequential(
+            torch.nn.AdaptiveAvgPool2d(output_size=(1,1)),
+            torch.nn.Flatten(),
+            torch.nn.Linear(self.hparams.num_features, 5)
+        )
     def forward(self, x):
-        return self.m(x)
+        features = self.backbone(x)
+        return self.head(features[-1])
 
 class SWAV(Model):
     def __init__(self, config):
@@ -62,5 +78,3 @@ class SWAV(Model):
     def forward(self, x):
         features = self.encoder(x)[-1]
         return self.fc(features)
-
-
