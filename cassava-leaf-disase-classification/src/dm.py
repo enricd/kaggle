@@ -9,7 +9,7 @@ from pathlib import Path
 import math
 import cv2 
 import albumentations as A 
-from albumentations.pytorch import ToTensorV2
+import numpy as np
 
 class Dataset(torch.utils.data.Dataset):
     def __init__(self, path, imgs, labels, trans=None):
@@ -22,13 +22,11 @@ class Dataset(torch.utils.data.Dataset):
         return len(self.imgs)
 
     def __getitem__(self, ix):
-        #img = torchvision.io.read_image(
-        #    f'{self.path}/{self.imgs[ix]}').float() / 255.
         img = cv2.imread(f'{self.path}/{self.imgs[ix]}')
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         if self.trans:
             img = self.trans(image=img)['image']
-        img = torch.tensor(img / 255., dtype=torch.float).permute(2,0,1)
+        img = torch.from_numpy(img.astype(np.float32)).permute(2,0,1)
         label = torch.tensor(self.labels[ix], dtype=torch.long)
         return img, label
 
@@ -77,7 +75,7 @@ class DataModule(pl.LightningDataModule):
             train['label'].values,
             trans = A.Compose([
                 getattr(A, trans)(**params) for trans, params in self.train_trans.items()
-            ]) if self.train_trans else None
+            ]) if self.train_trans else A.Normalize()
         )
         # val dataset
         self.val_ds=Dataset(
@@ -86,7 +84,7 @@ class DataModule(pl.LightningDataModule):
             val['label'].values,
             trans = A.Compose([
                 getattr(A, trans)(**params) for trans, params in self.val_trans.items()
-            ]) if self.val_trans else None
+            ]) if self.val_trans else A.Normalize()
         )
 
     def train_dataloader(self):
