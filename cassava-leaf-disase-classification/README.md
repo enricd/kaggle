@@ -28,7 +28,7 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 # Día 5
 
 - Nuevos [modelos](./07_modelos.ipynb)
-- [se_resnext50](./07_modelos.py) -> 0.849 (subset 0.5)
+- [se_resnext50](./07_modelos.py) -> 0.81 (0.821 + tta)
 
 Probar resnest, efficientnet
 Con CV y TTA puede mejorar
