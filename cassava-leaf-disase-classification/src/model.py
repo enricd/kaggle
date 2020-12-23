@@ -13,14 +13,22 @@ class Model(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters(config)
 
-    def training_step(self, batch, batch_idx):
-        x, y = batch
-        if self.trainer.current_epoch < self.hparams.unfreeze:
+    def forward(self, x):
+        features = self.backbone(x)
+        return self.head(features)
+
+    def extract_features(self, x):
+        if self.trainer.current_epoch <= self.hparams.unfreeze:
             with torch.no_grad():
                 features = self.backbone(x)
         else: 
             features = self.backbone(x)
-        y_hat = self.head(features[-1])
+        return features
+
+    def training_step(self, batch, batch_idx):
+        x, y = batch
+        features = self.extract_features(x)
+        y_hat = self.head(features)
         loss = F.cross_entropy(y_hat, y)
         acc = accuracy(y_hat, y)
         self.log('loss', loss)
@@ -37,7 +45,7 @@ class Model(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = getattr(torch.optim, self.hparams.optimizer)(self.parameters(), lr=self.hparams.lr)
-        if self.hparams.scheduler:
+        if 'scheduler' in self.hparams:
             schedulers = [
                 getattr(torch.optim.lr_scheduler, scheduler)(optimizer, **params)
                 for scheduler, params in self.hparams.scheduler.items()
@@ -48,11 +56,9 @@ class Model(pl.LightningModule):
 class Resnet(Model):
     def __init__(self, config):
         super().__init__(config)
-        self.resnet = getattr(torchvision.models, self.hparams.backbone)(pretrained=True)
-        self.resnet.fc = torch.nn.Linear(self.resnet.fc.in_features, 5)
-    
-    def forward(self, x):
-        return self.resnet(x)
+        self.backbone = timm.create_model(self.hparams.backbone, pretrained=self.hparams.pretrained)
+        self.head = torch.nn.Linear(self.backbone.fc.in_features, 5)
+        self.backbone.reset_classifier(0)
 
 class TIMM(Model):
     def __init__(self, config):
@@ -61,11 +67,27 @@ class TIMM(Model):
         self.head = torch.nn.Sequential(
             torch.nn.AdaptiveAvgPool2d(output_size=(1,1)),
             torch.nn.Flatten(),
-            torch.nn.Linear(self.hparams.num_features, 5)
+            torch.nn.Linear(self.backbone.feature_info.channels(-1), 5)
         )
+    
     def forward(self, x):
         features = self.backbone(x)
         return self.head(features[-1])
+
+    def extract_features(self, x):
+        if self.trainer.current_epoch <= self.hparams.unfreeze:
+            with torch.no_grad():
+                features = self.backbone(x)
+        else: 
+            features = self.backbone(x)
+        return features[-1]
+
+class VIT(Model):
+    def __init__(self, config):
+        super().__init__(config)
+        self.backbone = timm.create_model(self.hparams.backbone, pretrained=self.hparams.pretrained)
+        self.head = torch.nn.Linear(self.backbone.head.in_features, 5)
+        self.backbone.reset_classifier(0)
 
 class SWAV(Model):
     def __init__(self, config):

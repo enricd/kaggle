@@ -25,11 +25,9 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 - [Validación Cruzada](./06_cv.py) -> 0.825
 
-# Día 5 
+# Día 5
 
-en0 < renset18 < wide resnet50 (66M) < se_resnet50 (26M) < swav(28M+15M) < resnext50 (22M) < resnet50 < resnest (25M) < se_resnext (25M) < en5 (28M) < vit_base_resnet50 (110M) < en3 (10M)
-
-
+vit_base_resnet50 (110M) < renset18 (1.2M) < se_resnet50 (26M) < swav(28M+15M) < resnext50 (22M) < resnet50 (23.5M) < resnest (25.4M) < se_resnext (25.5M) < en5 (28M) < < en3 (10M)
 
 efficientnet_b3 -> 0.8375 (val) / 0.791 (lb)
 
@@ -42,4 +40,3 @@ efficientnet_b3 -> 0.8375 (val) / 0.791 (lb)
 
 pseudolabels con eficentnetb3 entrenada en todo el dataset y threshold 0.95 en test y extra de extra
 resnet18 da -> 0.85 (val) / 0.784 (lb)
-
