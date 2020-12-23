@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from pytorch_lightning.metrics.functional.classification import accuracy
 import torch
 from torchvision import transforms
+import timm
 
 class Model(pl.LightningModule):
 
@@ -39,3 +40,21 @@ class Resnet(Model):
     
     def forward(self, x):
         return self.resnet(x)
+
+class TIMM(Model):
+    def __init__(self, config):
+        super().__init__(config)
+        self.backbone = timm.create_model(
+            self.hparams.backbone, 
+            pretrained=self.hparams.pretrained, 
+            features_only=True
+        )
+        self.head = torch.nn.Sequential(
+            torch.nn.AdaptiveAvgPool2d(output_size=(1,1)),
+            torch.nn.Flatten(),
+            torch.nn.Linear(self.backbone.feature_info.channels(-1), 5)
+        )
+    
+    def forward(self, x):
+        features = self.backbone(x)
+        return self.head(features[-1])

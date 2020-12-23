@@ -28,7 +28,7 @@ class Dataset(torch.utils.data.Dataset):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         if self.trans:
             img = self.trans(image=img)['image']
-        img = torch.tensor(img / 255., dtype=torch.float).permute(2,0,1)
+        img = torch.tensor(img, dtype=torch.float).permute(2,0,1)
         label = torch.tensor(self.labels[ix], dtype=torch.long)
         return img, label
 
@@ -77,7 +77,7 @@ class DataModule(pl.LightningDataModule):
             train['label'].values,
             trans = A.Compose([
                 getattr(A, trans)(**params) for trans, params in self.train_trans.items()
-            ]) if self.train_trans else None
+            ]) if self.train_trans else A.Normalize()
         )
         # val dataset
         self.val_ds=Dataset(
@@ -86,7 +86,7 @@ class DataModule(pl.LightningDataModule):
             val['label'].values,
             trans = A.Compose([
                 getattr(A, trans)(**params) for trans, params in self.val_trans.items()
-            ]) if self.val_trans else None
+            ]) if self.val_trans else A.Normalize()
         )
 
     def train_dataloader(self):

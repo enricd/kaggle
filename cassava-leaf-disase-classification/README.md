@@ -18,9 +18,17 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 # Día 3
 
-- [Data Augmentation](./04_da.py)
+- [Data Augmentation](./04_da.py) -> 0.79
 - [TTA](./05_tta.ipynb) -> 0.815
 
 # Día 4
 
 - [Validación Cruzada](./06_cv.py) -> 0.825
+
+# Día 5
+
+- Nuevos [modelos](./07_modelos.ipynb)
+- [se_resnext50](./07_modelos.py) -> 0.849 (50% dataset)
+
+Probar resnest, efficientnet
+Con CV y TTA puede mejorar

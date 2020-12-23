@@ -20,7 +20,7 @@ config = {
     'subset': 0.1,
     'num_workers': 0,
     # model
-    'backbone': 'resnet18',
+    'backbone': 'resnet50',
     # data augmentation
     'size': size,
     'train_trans': {
