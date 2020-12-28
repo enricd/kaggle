@@ -32,3 +32,12 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 Probar resnest, efficientnet
 Con CV y TTA puede mejorar
+
+
+Entrenamiento final
+
+- se_resnext101 cv5 256 randomCrop onecycle 20epochs bs, lr con pl finders, ensemble, tta
+- pseudolabeling
+- se_resnext101 cv5 256 randomCrop onecycle 20epochs bs, lr con pl finders + pseudolabels, ensemble, tta
+- probar eficientnet
+- repetir con 512 randomResizedCrop 
