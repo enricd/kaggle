@@ -7,13 +7,14 @@ from src import Model, DataModule, MyEarlyStopping
 size = 256
 config = {
     # optimization
-    'lr': 3e-4,
+    'lr': 1e-5,
     'optimizer': 'Adam',
     'batch_size': 128,
     'scheduler': {
-        'StepLR': {
-            'step_size': 3,
-            'gamma': 0.1,
+        'OneCycleLR': {
+            'max_lr': 1e-3,
+            'total_steps': 10,
+            'pct_start': 0.2,
             'verbose': True
         }
     },
@@ -45,9 +46,9 @@ config = {
     },
     # training params
     'precision': 16,
-    'max_epochs': 50,
+    'max_epochs': 20,
     'val_batches': 5,
-    'es_start_from': 0,
+    'es_start_from': 5,
     'patience': 3
 }
 
@@ -58,7 +59,7 @@ dm = DataModule(
 
 model = Model(config)
 
-wandb_logger = WandbLogger(project="cassava-tl", name="step", config=config)
+wandb_logger = WandbLogger(project="cassava-tl", name="cycle2", config=config)
 
 es = MyEarlyStopping(monitor='val_acc', mode='max', patience=config['patience'])
 checkpoint = ModelCheckpoint(dirpath='./', filename=f'{config["backbone"]}-{config["size"]}-{{val_acc:.5f}}', save_top_k=1, monitor='val_acc', mode='max')

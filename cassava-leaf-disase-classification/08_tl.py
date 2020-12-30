@@ -13,7 +13,7 @@ config = {
     # data
     'extra_data': 1,
     'subset': 0.1,
-    'num_workers': 20,
+    'num_workers': 0,
     # model
     'backbone': 'seresnext50_32x4d',
     'pretrained': True,
@@ -38,7 +38,7 @@ config = {
     },
     # training params
     'precision': 16,
-    'max_epochs': 50,
+    'max_epochs': 10,
     'val_batches': 5,
     'es_start_from': 3,
     'patience': 3
@@ -51,7 +51,7 @@ dm = DataModule(
 
 model = Model(config)
 
-wandb_logger = WandbLogger(project="cassava-tl", name="unfreeze", config=config)
+wandb_logger = WandbLogger(project="cassava-tl", name="freeze-unfreeze", config=config)
 
 es = MyEarlyStopping(monitor='val_acc', mode='max', patience=config['patience'])
 checkpoint = ModelCheckpoint(dirpath='./', filename=f'{config["backbone"]}-{config["size"]}-{{val_acc:.5f}}', save_top_k=1, monitor='val_acc', mode='max')
