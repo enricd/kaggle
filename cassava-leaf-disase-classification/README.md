@@ -35,5 +35,5 @@ Con CV y TTA puede mejorar
 
 # Día 6
 
-- Transfer learning y [Learning Rate scheduling](./08_tl.py) ->
+- Transfer learning y [Learning Rate scheduling](./08_tl.py) -> 0.824 (tta)
 - Cómo encontrar el batch size y learning rate óptimos con Pytorch Lightning [aquí](./09_lr_find.ipynb)

@@ -27,7 +27,7 @@ class Model(pl.LightningModule):
         return self.head(features[-1])
 
     def extract_features(self, x):
-        if self.trainer.current_epoch <= self.hparams.unfreeze:
+        if self.trainer.current_epoch < self.hparams.unfreeze:
             with torch.no_grad():
                 features = self.backbone(x)
         else: 

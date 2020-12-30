@@ -43,7 +43,8 @@ class DataModule(pl.LightningDataModule):
             batch_size=64,
             train_trans=None,
             val_trans=None,
-            num_workers=1,
+            num_workers=0,
+            pin_memory=False,
             **kwargs):
         super().__init__()
         self.path = path
@@ -52,7 +53,8 @@ class DataModule(pl.LightningDataModule):
         self.subset = subset
         self.val_trans = val_trans
         self.batch_size = batch_size
-        self.num_workers = 0
+        self.num_workers = num_workers
+        self.pin_memory = pin_memory
 
     def setup(self, stage=None):
         # read csv files with imgs names and labels
@@ -90,7 +92,7 @@ class DataModule(pl.LightningDataModule):
         )
 
     def train_dataloader(self):
-        return DataLoader(self.train_ds, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=True, pin_memory=True)
+        return DataLoader(self.train_ds, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=True, pin_memory=self.pin_memory)
 
     def val_dataloader(self):
-        return DataLoader(self.val_ds, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=False, pin_memory=True)
+        return DataLoader(self.val_ds, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=False, pin_memory=self.pin_memory)
