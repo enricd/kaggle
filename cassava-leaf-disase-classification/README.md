@@ -32,3 +32,8 @@ Solución ganadora challenge anterior: https://www.kaggle.com/c/cassava-disease/
 
 Probar resnest, efficientnet
 Con CV y TTA puede mejorar
+
+# Día 6
+
+- Transfer learning y [Learning Rate scheduling](./08._tl.py) ->
+- Cómo encontrar el batch size y learning rate óptimos con Pytorch Lightning [aquí](./08_lr_find.ipynb)

@@ -1,3 +1,3 @@
 from .dm import DataModule
-from .model import Resnet, TIMM
+from .model import Model
 from .cbs import MyEarlyStopping
