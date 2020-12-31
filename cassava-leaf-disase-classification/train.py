@@ -15,14 +15,14 @@ config = {
      'OneCycleLR': {
          'max_lr': 5e-3,
          'total_steps': 10,
-         'pct_start': 0.2,
+         'pct_start': 0.1,
          'verbose': True
      }
     },
     # data
     'extra_data': 1,
     'subset': 0.,
-    'num_workers': 0,
+    'num_workers': 20,
     'pin_memory': True,
     # model
     'backbone': 'seresnext50_32x4d',
