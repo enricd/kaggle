@@ -8,20 +8,20 @@ from src import DataModule, Model, MyEarlyStopping
 size = 256
 config = {
     # optimization
-    'lr': 1e-5,
+    'lr': 3e-4,
     'optimizer': 'Adam',
-    'batch_size': 250,
-    'scheduler': {
-     'OneCycleLR': {
-         'max_lr': 5e-3,
-         'total_steps': 10,
-         'pct_start': 0.2,
-         'verbose': True
-     }
-    },
+    'batch_size': 256,
+    # 'scheduler': {
+    #  'OneCycleLR': {
+    #      'max_lr': 5e-3,
+    #      'total_steps': 10,
+    #      'pct_start': 0.2,
+    #      'verbose': True
+    #  }
+    # },
     # data
     'data': 'data_extra_pseudo',
-    'subset': 0.1,
+    'subset': 0,
     'num_workers': 20,
     'pin_memory': True,
     # model
@@ -49,9 +49,9 @@ config = {
     # training params
     'gpus': 1,
     'precision': 16,
-    'max_epochs': 10,
-    'val_batches': 5,
-    'es_start_from': 10,
+    'max_epochs': 50,
+    'val_batches': 1.,
+    'es_start_from': 0,
     'patience': 3
 }
 

@@ -37,3 +37,11 @@ Con CV y TTA puede mejorar
 
 - Transfer learning y [Learning Rate scheduling](./08_tl.py) -> 0.824 (tta)
 - Cómo encontrar el batch size y learning rate óptimos con Pytorch Lightning [aquí](./09_lr_find.ipynb)
+
+# Día 7
+
+ - seresnext50 cv 256 onecycle 10e -> 0.881 (5 tta)
+ - pseudolabelling
+ - resnet18 pseudo (subset 0.1 sin clase 3) -> 0.809 val / 0.820 (+tta)
+
+ probar a entrenar resnet18 y seresnext50 en todo el dataset + pseudolabels con y sin clase 3.
