@@ -41,5 +41,5 @@ Con CV y TTA puede mejorar
 # Día 7
 
 - seresnext50 cv 256 onecycle 10e -> 0.881 (5 tta)
-  pseudolabelling
-- resnet18 pseudo (subset 0.1 sin clase 3) -> 0.809 val / 0.820 (+tta)
+- [pseudolabelling](./10_pseudolabelling.ipynb)
+- [resnet18 pseudo](./10_pseudo.py) (subset 0.1 sin clase 3) -> 0.809 val / 0.820 (+tta)
